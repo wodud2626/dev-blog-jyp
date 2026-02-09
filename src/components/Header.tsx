@@ -11,6 +11,9 @@ import { Link } from "react-router-dom";
 import { logout } from "@/lib/auth";
 import { useAuthStore } from "@/store/authStore";
 
+// 토글 버튼 컴포넌트 임포트
+import ThemeToggle from "./ThemeToggle";
+
 function Header() {
     // Zustand 스토어에서 user 가져오기
     const user = useAuthStore((state) => state.user);
@@ -24,8 +27,8 @@ function Header() {
     };
 
     return (
-        <header className="bg-white shadow-sm sticky top-0 z-10">
-            <div className="max-w-4xl mx-auto px-4">
+        <header className="header">
+            <div className="container-main">
                 <div className="flex items-center justify-between h-16">
                     {/* 로고 */}
                     <Link to="/" className="text-xl font-bold text-gray-900">
@@ -67,6 +70,8 @@ function Header() {
                                 </Link>
                             </>
                         )}
+                        {/* 테마 토글 */}
+                        <ThemeToggle />
                     </div>
                 </div>
             </div>

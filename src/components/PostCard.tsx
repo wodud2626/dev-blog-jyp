@@ -41,7 +41,7 @@ function PostCard({ post }: PostCardProps) {
     };
 
     return (
-        <article className="bg-white rounded-lg shadow hover:shadow-md transition-shadow">
+        <article className="card">
             <Link to={`/posts/${post.id}`} className="block p-6">
                 {/* 카테고리 태그 */}
                 {post.category && (

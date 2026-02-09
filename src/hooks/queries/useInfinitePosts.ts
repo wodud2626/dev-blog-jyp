@@ -17,7 +17,7 @@ interface UseInfinitePostsOptions {
 }
 
 export function useInfinitePosts(options: UseInfinitePostsOptions = {}) {
-  const { category = null, pageSize = 10 } = options;
+  const { category = null, pageSize = 5 } = options;
 
   return useInfiniteQuery({
     queryKey: queryKeys.posts.list({ category }),
