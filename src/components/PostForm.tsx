@@ -6,7 +6,6 @@ import { CATEGORY_LABELS } from "@/types";
 import { TITLE_MAX_LENGTH } from "@/constants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -17,12 +16,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import RichEditor from "@/components/RichEditor";
 
 interface PostFormProps {
   initialData?: PostInput;
   onSubmit: (data: PostInput) => Promise<void>;
   submitLabel?: string;
   isLoading?: boolean;
+  userId: string;
 }
 
 function PostForm({
@@ -30,6 +31,7 @@ function PostForm({
   onSubmit,
   submitLabel = "발행하기",
   isLoading = false,
+  userId,
 }: PostFormProps) {
   const [title, setTitle] = useState(initialData?.title || "");
   const [content, setContent] = useState(initialData?.content || "");
@@ -131,14 +133,13 @@ function PostForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="content">내용</Label>
-            <Textarea
-              id="content"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
+            <Label>내용</Label>
+            <RichEditor
+              content={content}
+              onChange={setContent}
+              userId={userId}
               placeholder="게시글 내용을 입력하세요"
-              rows={15}
-              className="min-h-max resize-y"
+              disabled={isLoading}
             />
           </div>
 

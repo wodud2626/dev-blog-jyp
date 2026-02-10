@@ -85,6 +85,7 @@ export interface PostSummary {
   authorEmail: string;
   authorDisplayName: string | null;
   createdAt: Timestamp;
+  thumbnailUrl?: string;
 }
 
 // ============================================

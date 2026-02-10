@@ -74,6 +74,7 @@ function PostEditPage() {
         onSubmit={handleSubmit}
         submitLabel="수정하기"
         isLoading={updatePostMutation.isPending}
+        userId={user?.uid ?? ""}
       />
     </div>
   );
