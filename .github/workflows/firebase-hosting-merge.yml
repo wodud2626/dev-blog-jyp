@@ -23,8 +23,8 @@ jobs:
           VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
-    with:
-      repoToken: ${{ secrets.GITHUB_TOKEN }}
-      firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV_BLOG_JYP }}
-      channelId: live
-      projectId: dev-blog-jyp
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV_BLOG_JYP }}
+          channelId: live
+          projectId: dev-blog-jyp
