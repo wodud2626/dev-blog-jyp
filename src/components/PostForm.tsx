@@ -3,6 +3,7 @@ import { AlertCircle } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import type { PostInput, Category } from "@/types";
 import { CATEGORY_LABELS } from "@/types";
+import { TITLE_MAX_LENGTH } from "@/constants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -33,7 +34,7 @@ function PostForm({
   const [title, setTitle] = useState(initialData?.title || "");
   const [content, setContent] = useState(initialData?.content || "");
   const [category, setCategory] = useState<Category | null>(
-    initialData?.category || null
+    initialData?.category || null,
   );
   const [error, setError] = useState<string | null>(null);
 
@@ -46,8 +47,8 @@ function PostForm({
       return;
     }
 
-    if (title.length > 100) {
-      setError("제목은 100자 이내로 입력해주세요.");
+    if (title.length > TITLE_MAX_LENGTH) {
+      setError(`제목은 ${TITLE_MAX_LENGTH}자 이내로 입력해주세요.`);
       return;
     }
 
@@ -85,7 +86,6 @@ function PostForm({
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* 에러 메시지 */}
           {error && (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
@@ -93,7 +93,6 @@ function PostForm({
             </Alert>
           )}
 
-          {/* 제목 입력 */}
           <div className="space-y-2">
             <Label htmlFor="title">제목</Label>
             <Input
@@ -102,13 +101,14 @@ function PostForm({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="게시글 제목을 입력하세요"
-              maxLength={100}
+              maxLength={TITLE_MAX_LENGTH}
               className="h-11"
             />
-            <p className="text-xs text-right">{title.length}/100</p>
+            <p className="text-xs text-right">
+              {title.length}/{TITLE_MAX_LENGTH}
+            </p>
           </div>
 
-          {/* 카테고리 선택 */}
           <div className="space-y-2">
             <Label htmlFor="category">카테고리 (선택)</Label>
             <Select
@@ -130,7 +130,6 @@ function PostForm({
             </Select>
           </div>
 
-          {/* 내용 입력 */}
           <div className="space-y-2">
             <Label htmlFor="content">내용</Label>
             <Textarea
@@ -139,17 +138,16 @@ function PostForm({
               onChange={(e) => setContent(e.target.value)}
               placeholder="게시글 내용을 입력하세요"
               rows={15}
-              className="min-h-[300px] resize-y"
+              className="min-h-max resize-y"
             />
           </div>
 
-          {/* 제출 버튼 */}
           <div className="flex justify-end pt-4">
             <Button
               type="submit"
               disabled={isLoading}
               size="lg"
-              className="min-w-[120px]"
+              className="min-w-5"
             >
               {isLoading ? (
                 <>

@@ -11,7 +11,7 @@ function Layout() {
       </main>
 
       <footer className="border-t">
-        <div className="container-main py-8 text-center text-sm">
+        <div className="container-main py-4 text-center text-sm">
           © 2025 My Dev Blog. Built with React + Firebase
         </div>
       </footer>

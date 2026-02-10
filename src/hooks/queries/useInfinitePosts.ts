@@ -1,15 +1,11 @@
-// src/hooks/queries/useInfinitePosts.ts
-
 /**
  * 무한 스크롤 게시글 목록 조회 훅
- * 
- * Day 1 요구사항: UX-003 (모바일 반응형 지원 - 무한 스크롤)
  */
 
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { getPostsWithOptions, type GetPostsResult } from '../../lib/posts';
-import { queryKeys } from './keys';
-import type { Category } from '../../types';
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { getPostsWithOptions, type GetPostsResult } from "@/lib/posts";
+import { queryKeys } from "./keys";
+import type { Category } from "@/types";
 
 interface UseInfinitePostsOptions {
   category?: Category | null;
@@ -21,7 +17,7 @@ export function useInfinitePosts(options: UseInfinitePostsOptions = {}) {
 
   return useInfiniteQuery({
     queryKey: queryKeys.posts.list({ category }),
-    
+
     queryFn: async ({ pageParam }) => {
       return getPostsWithOptions({
         category,
@@ -29,11 +25,9 @@ export function useInfinitePosts(options: UseInfinitePostsOptions = {}) {
         lastDoc: pageParam,
       });
     },
-    
-    // 첫 페이지는 커서 없이 시작
-    initialPageParam: null as GetPostsResult['lastDoc'],
-    
-    // 다음 페이지 파라미터 결정
+
+    initialPageParam: null as GetPostsResult["lastDoc"],
+
     getNextPageParam: (lastPage) => {
       return lastPage.hasMore ? lastPage.lastDoc : undefined;
     },
