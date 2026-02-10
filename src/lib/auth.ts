@@ -12,10 +12,15 @@ import {
   sendEmailVerification,
   signInWithPopup,
   GoogleAuthProvider,
+  updateProfile,
+  updatePassword as firebaseUpdatePassword,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
 } from "firebase/auth";
 import type { User as FirebaseUser, AuthError } from "firebase/auth";
 import { auth } from "./firebase";
 import type { User } from "@/types";
+import { createUserDocument, updateUserProfileDoc } from "./users";
 
 /**
  * Google Auth Provider
@@ -29,8 +34,9 @@ const googleProvider = new GoogleAuthProvider();
  */
 export async function signInWithGoogle(): Promise<User> {
   const result = await signInWithPopup(auth, googleProvider);
-  console.log("service auth signInWithGoogle result --- ", result);
-  return formatUser(result.user);
+  const user = formatUser(result.user);
+  await createUserDocument(user, "google");
+  return user;
 }
 
 /**
@@ -59,7 +65,9 @@ export async function signUp(email: string, password: string): Promise<User> {
     email,
     password,
   );
-  return formatUser(userCredential.user);
+  const user = formatUser(userCredential.user);
+  await createUserDocument(user, "email");
+  return user;
 }
 
 /**
@@ -165,4 +173,46 @@ export function getAuthErrorMessage(error: unknown): string {
   }
 
   return "알 수 없는 오류가 발생했습니다.";
+}
+
+/**
+ * 사용자 표시 이름 변경
+ */
+export async function updateUserDisplayName(
+  displayName: string,
+): Promise<void> {
+  if (!auth.currentUser) throw new Error("로그인된 사용자가 없습니다.");
+
+  await updateProfile(auth.currentUser, { displayName });
+  await updateUserProfileDoc(auth.currentUser.uid, { displayName });
+}
+
+/**
+ * 사용자 프로필 사진 변경
+ */
+export async function updateUserPhoto(photoURL: string): Promise<void> {
+  if (!auth.currentUser) throw new Error("로그인된 사용자가 없습니다.");
+
+  await updateProfile(auth.currentUser, { photoURL });
+  await updateUserProfileDoc(auth.currentUser.uid, { photoURL });
+}
+
+/**
+ * 비밀번호 변경 (이메일 계정 전용)
+ * 보안을 위해 현재 비밀번호로 재인증 후 변경
+ */
+export async function changePassword(
+  currentPassword: string,
+  newPassword: string,
+): Promise<void> {
+  if (!auth.currentUser || !auth.currentUser.email) {
+    throw new Error("로그인된 사용자가 없습니다.");
+  }
+
+  const credential = EmailAuthProvider.credential(
+    auth.currentUser.email,
+    currentPassword,
+  );
+  await reauthenticateWithCredential(auth.currentUser, credential);
+  await firebaseUpdatePassword(auth.currentUser, newPassword);
 }

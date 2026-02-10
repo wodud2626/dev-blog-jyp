@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { logout } from "@/lib/auth";
 import { useAuthStore } from "@/store/authStore";
-import { ROUTES } from "@/constants";
+import { ROUTES, getProfilePath } from "@/constants";
 import ThemeToggle from "./ThemeToggle";
 
 function Header() {
@@ -26,9 +26,12 @@ function Header() {
           <div className="flex items-center gap-4">
             {user ? (
               <>
-                <span className="text-sm">
+                <Link
+                  to={getProfilePath(user.uid)}
+                  className="text-sm hover:underline"
+                >
                   {user.displayName || user.email}
-                </span>
+                </Link>
                 <button onClick={handleLogout} className="btn-ghost">
                   로그아웃
                 </button>

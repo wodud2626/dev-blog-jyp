@@ -1,9 +1,11 @@
 import { Outlet } from "react-router-dom";
 import Header from "@/components/Header";
+import ScrollToTop from "@/components/ScrollToTop";
 
 function Layout() {
   return (
     <div className="min-h-screen flex flex-col">
+      <ScrollToTop />
       <Header />
 
       <main className="flex-1 container-main py-8">
